@@ -60,6 +60,7 @@
     <Compile Include="HashCode\HashTools.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transaction.cs" />
     <Compile Include="Wallet\Wallet.cs" />
     <EmbeddedResource Include="BlockchainApp.resx">
       <DependentUpon>BlockchainApp.cs</DependentUpon>
