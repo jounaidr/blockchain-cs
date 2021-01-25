@@ -39,26 +39,26 @@
             this.TextOutput.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.TextOutput.Location = new System.Drawing.Point(12, 12);
             this.TextOutput.Name = "TextOutput";
-            this.TextOutput.Size = new System.Drawing.Size(657, 314);
+            this.TextOutput.Size = new System.Drawing.Size(1415, 569);
             this.TextOutput.TabIndex = 0;
             this.TextOutput.Text = "";
             this.TextOutput.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // Print
             // 
-            this.Print.Location = new System.Drawing.Point(12, 332);
+            this.Print.Location = new System.Drawing.Point(12, 587);
             this.Print.Name = "Print";
-            this.Print.Size = new System.Drawing.Size(103, 50);
+            this.Print.Size = new System.Drawing.Size(70, 22);
             this.Print.TabIndex = 1;
-            this.Print.Text = "Print";
+            this.Print.Text = "Print Block";
             this.Print.UseVisualStyleBackColor = true;
             this.Print.Click += new System.EventHandler(this.Print_Click);
             // 
             // TextInput
             // 
-            this.TextInput.Location = new System.Drawing.Point(121, 332);
+            this.TextInput.Location = new System.Drawing.Point(88, 587);
             this.TextInput.Name = "TextInput";
-            this.TextInput.Size = new System.Drawing.Size(548, 50);
+            this.TextInput.Size = new System.Drawing.Size(50, 22);
             this.TextInput.TabIndex = 2;
             this.TextInput.Text = "";
             this.TextInput.TextChanged += new System.EventHandler(this.TextInput_TextChanged);
@@ -68,7 +68,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(681, 481);
+            this.ClientSize = new System.Drawing.Size(1439, 630);
             this.Controls.Add(this.TextInput);
             this.Controls.Add(this.Print);
             this.Controls.Add(this.TextOutput);

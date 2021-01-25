@@ -18,3 +18,6 @@ C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\obj\Debug\BlockchainAssig
 C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\obj\Debug\BlockchainAssignment.csproj.CoreCompileInputs.cache
 C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\obj\Debug\BlockchainAssignment.exe
 C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\obj\Debug\BlockchainAssignment.pdb
+C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\bin\Debug\Newtonsoft.Json.xml
+C:\Users\jouna\REPOS\blockchain-c\BlockchainAssignment\obj\Debug\BlockchainAssignment.csproj.CopyComplete

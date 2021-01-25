@@ -28,7 +28,11 @@ namespace BlockchainAssignment
 
         private void Print_Click(object sender, EventArgs e)
         {
-            TextOutput.Text = TextInput.Text;
+            int index = 0;
+            if(Int32.TryParse(TextInput.Text, out index))
+            {
+                TextOutput.Text = this.blockchain.getBlockAsString(index);
+            }
         }
 
         private void TextInput_TextChanged(object sender, EventArgs e)
