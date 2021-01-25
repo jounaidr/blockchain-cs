@@ -20,5 +20,15 @@ namespace BlockchainAssignment
             index = lastBlock.index++;
             previousHash = lastBlock.hash;
         }
+
+        public Block()
+        {
+
+        }
+
+        public String generateHash()
+        {
+            String hash = String.Empty;
+        }
     }
 }
