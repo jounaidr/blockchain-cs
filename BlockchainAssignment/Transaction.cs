@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlockchainAssignment.HashCode;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -9,15 +11,15 @@ namespace BlockchainAssignment
 {
     class Transaction
     {
-        String hash;
-        String signature;
-        String senderAddress;
-        String recipientAddress;
+        public String hash;
+        public String signature;
+        public String senderAddress;
+        public String recipientAddress;
 
-        DateTime timestamp;
+        public DateTime timestamp;
 
-        double transactionValue;
-        double fee;
+        public double transactionValue;
+        public double fee;
 
         public Transaction(String senderAddress, String recipientAddress, double transactionValue, double fee, String privateKey)
         {
@@ -34,19 +36,19 @@ namespace BlockchainAssignment
 
         public String generateHash()
         {
-            String inputString = timestamp.ToString() + senderAddress + recipientAddress + transactionValue.ToString() + fee.ToString();
+            String hash = new ShaUtil().generateHash(
+                timestamp.ToString() 
+                + senderAddress 
+                + recipientAddress 
+                + transactionValue.ToString() 
+                + fee.ToString());
 
-            Byte[] inputBytes = Encoding.UTF8.GetBytes(inputString);
-            SHA256Managed messageDigest = new SHA256Managed();
-            Byte[] hash = messageDigest.ComputeHash(inputBytes);
+            return hash;
+        }
 
-            string hashString = string.Empty;
-            foreach (byte i in hash)
-            {
-                hashString += String.Format("{0:x2}", i);
-            }
-
-            return hashString;
+        public override string ToString()
+        {
+            return "TRANSACTION: " + JsonConvert.SerializeObject(this);
         }
     }
 }
