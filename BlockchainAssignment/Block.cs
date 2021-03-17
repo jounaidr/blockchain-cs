@@ -5,32 +5,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlockchainAssignment
 {
     class Block
     {
+        const int THREADS = 12;
+
         public int index;
         public DateTime timestamp;
         public String hash;
         public String previousHash;
 
         public double nonce = 0;
-        public int difficulty = 3;
+        public double enonce = 0;
+        public int difficulty = 5;
 
         public double reward = 1.0;
         public double fees = 0.0;
 
         public String minerAddress = "";
-
         public List<Transaction> transactions = new List<Transaction>();
-
         public string merkleRoot;
+
+        public double blockTime;
+        bool isHashFound;
 
         public Block()
         {
-            this.timestamp = DateTime.Now; //possibe future issues with verification here
+            this.timestamp = DateTime.Now;
             this.index = 0;
             this.previousHash = String.Empty;
             this.hash = this.generateHash();
@@ -48,20 +53,73 @@ namespace BlockchainAssignment
             this.transactions = transactions;
             this.merkleRoot = generateMerkleRoot(transactions);
 
-            this.hash = this.mineBlock();
+            isHashFound = false;
+            this.mineBlockThreaded();
         }
 
         public String generateHash()
         {
             String hash = new ShaUtil().generateHash(
-                index.ToString() 
-                + timestamp.ToString() 
-                + previousHash
-                + nonce.ToString()
-                + reward.ToString()
-                + merkleRoot);
+                                                    index.ToString() 
+                                                    + timestamp.ToString() 
+                                                    + previousHash
+                                                    + nonce.ToString()
+                                                    + enonce.ToString()
+                                                    + reward.ToString()
+                                                    + merkleRoot);
 
             return hash;
+        }
+
+        public void mineBlockThreaded()
+        {
+            List<Thread> threads = new List<Thread>();
+            WaitHandle[] waitHandles = new WaitHandle[THREADS];
+
+            for (int i = 0; i < THREADS; i++)
+            {
+                
+                Random rnd = new Random();
+                var handle = new EventWaitHandle(false, EventResetMode.ManualReset);
+
+                new Thread(delegate ()
+                {
+
+                    String currentHash = generateHash();
+                    String hashDifficulty = new string('0', difficulty);
+                    int threadNonce = 0;
+                    int threadEnone = rnd.Next(1, int.MaxValue);
+
+                    while (!isHashFound)
+                    {
+                        threadNonce++;
+                        currentHash = new ShaUtil().generateHash(
+                                                                index.ToString()
+                                                                + timestamp.ToString()
+                                                                + previousHash
+                                                                + threadNonce.ToString()
+                                                                + threadEnone.ToString()
+                                                                + reward.ToString()
+                                                                + merkleRoot);
+
+                        if (currentHash.StartsWith(hashDifficulty))
+                        {
+                            isHashFound = true;
+
+                            TimeSpan timeDiff = DateTime.Now - this.timestamp;
+                            blockTime = timeDiff.TotalSeconds;
+
+                            this.nonce = threadNonce;
+                            this.enonce = threadEnone;
+                            this.hash = currentHash;
+                            handle.Set();
+                        }
+                    }
+                }).Start();
+                waitHandles[i] = handle;
+            }
+
+            WaitHandle.WaitAny(waitHandles);
         }
 
         public String mineBlock()
@@ -69,11 +127,14 @@ namespace BlockchainAssignment
             String hash = generateHash();
             String hashDifficulty = new string('0', difficulty);
 
-            while (!hash.StartsWith(hashDifficulty)) 
+            while (!hash.StartsWith(hashDifficulty))
             {
-                nonce++; 
+                nonce++;
                 hash = generateHash();
             }
+
+            TimeSpan timeDiff = DateTime.Now - this.timestamp;
+            this.blockTime = timeDiff.TotalSeconds;
 
             return hash;
         }

@@ -219,7 +219,7 @@
             // 
             // checkBalanceButton
             // 
-            this.checkBalanceButton.Location = new System.Drawing.Point(1332, 710);
+            this.checkBalanceButton.Location = new System.Drawing.Point(1330, 710);
             this.checkBalanceButton.Name = "checkBalanceButton";
             this.checkBalanceButton.Size = new System.Drawing.Size(97, 26);
             this.checkBalanceButton.TabIndex = 19;
