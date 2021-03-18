@@ -12,7 +12,8 @@ namespace BlockchainAssignment
 {
     class Block
     {
-        const int THREADS = 12;
+        const int THREADS = 24;
+        const double TARGET_BLOCK_TIME = 5.0;
 
         public int index;
         public DateTime timestamp;
@@ -21,7 +22,7 @@ namespace BlockchainAssignment
 
         public double nonce = 0;
         public double enonce = 0;
-        public int difficulty = 5;
+        public int difficulty;
 
         public double reward = 1.0;
         public double fees = 0.0;
@@ -43,18 +44,29 @@ namespace BlockchainAssignment
 
         public Block(Block lastBlock, List<Transaction> transactions, String minerAddress = "")
         {
-            this.timestamp = DateTime.Now;
-            this.index = lastBlock.index + 1;
+            this.timestamp = DateTime.Now; //Set block timestamp to time before hash is mined
+            this.index = lastBlock.index + 1; //Incremenet block index
             this.previousHash = lastBlock.hash;
 
-            this.minerAddress = minerAddress;
+            if (lastBlock.blockTime < TARGET_BLOCK_TIME)
+            {
+                //If previous blocks block time is less then the target block time, increase difficulty
+                this.difficulty = lastBlock.difficulty + 1;
+            }
+            else
+            {
+                //Else, decrease the difficulty
+                this.difficulty = lastBlock.difficulty - 1;
+            }
 
-            transactions.Add(createRewardTransaction(transactions));
-            this.transactions = transactions;
-            this.merkleRoot = generateMerkleRoot(transactions);
+            this.minerAddress = minerAddress; //Set the address of the miner who is generating the block
 
-            isHashFound = false;
-            this.mineBlockThreaded();
+            transactions.Add(createRewardTransaction(transactions)); //Add the reward transaction to the block for the miner
+            this.transactions = transactions; 
+            this.merkleRoot = generateMerkleRoot(transactions); //Calculate merkleroot of transactions
+
+            isHashFound = false; //Set the hash found flag to false before mining hash (used for threading)
+            this.mineBlockThreaded(); //Mine the hash
         }
 
         public String generateHash()
@@ -73,27 +85,26 @@ namespace BlockchainAssignment
 
         public void mineBlockThreaded()
         {
-            List<Thread> threads = new List<Thread>();
-            WaitHandle[] waitHandles = new WaitHandle[THREADS];
+            WaitHandle[] waitHandles = new WaitHandle[THREADS]; //Initialise WaitHandle flags for each thread
+            Random rnd = new Random();
 
-            for (int i = 0; i < THREADS; i++)
+            for (int i = 0; i < THREADS; i++) //For each thread...
             {
-                
-                Random rnd = new Random();
-                var handle = new EventWaitHandle(false, EventResetMode.ManualReset);
+                var handle = new EventWaitHandle(false, EventResetMode.ManualReset); //Initialise the handle flag for the thread
 
                 new Thread(delegate ()
                 {
-
+                    //Initialise thread local hash and nonce variables
                     String currentHash = generateHash();
-                    String hashDifficulty = new string('0', difficulty);
                     int threadNonce = 0;
                     int threadEnone = rnd.Next(1, int.MaxValue);
+                    //Generate a string of 0's that satisfies the difficulty (to be used for hash matching)
+                    String hashDifficulty = new string('0', difficulty);
 
                     while (!isHashFound)
                     {
-                        threadNonce++;
-                        currentHash = new ShaUtil().generateHash(
+                        threadNonce++; //Increment thread nonce
+                        currentHash = new ShaUtil().generateHash( //Generate hash using thread local variables
                                                                 index.ToString()
                                                                 + timestamp.ToString()
                                                                 + previousHash
@@ -104,22 +115,22 @@ namespace BlockchainAssignment
 
                         if (currentHash.StartsWith(hashDifficulty))
                         {
+                            //If hash is found in the thread, set the global isHashFound flag to true (so other threads will stop mining)
                             isHashFound = true;
 
                             TimeSpan timeDiff = DateTime.Now - this.timestamp;
-                            blockTime = timeDiff.TotalSeconds;
-
+                            blockTime = timeDiff.TotalSeconds; //Calculate blocktime as time diff between block timestamp and time when hash found
+                            //Set global block hash and nonce parameters to the thread local parameters 
                             this.nonce = threadNonce;
                             this.enonce = threadEnone;
                             this.hash = currentHash;
-                            handle.Set();
+                            handle.Set(); //Set the thread handle flag so main thread can continue...
                         }
                     }
                 }).Start();
                 waitHandles[i] = handle;
             }
-
-            WaitHandle.WaitAny(waitHandles);
+            WaitHandle.WaitAny(waitHandles); //Wait until any thread handle flag is set
         }
 
         public String mineBlock()
