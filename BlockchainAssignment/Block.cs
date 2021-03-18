@@ -13,7 +13,7 @@ namespace BlockchainAssignment
     class Block
     {
         const int THREADS = 24;
-        const double TARGET_BLOCK_TIME = 5.0;
+        const double TARGET_BLOCK_TIME = 0.1;
 
         public int index;
         public DateTime timestamp;

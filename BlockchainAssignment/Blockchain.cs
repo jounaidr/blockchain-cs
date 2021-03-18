@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MoreLinq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,64 @@ namespace BlockchainAssignment
         public List<Transaction> getTrasnactions()
         {
             int n = Math.Min(MAX_TRANSACTIONS, transactionPool.Count);
-            List<Transaction> pendingTransactions = Enumerable.Reverse(transactionPool).Take(n).Reverse().ToList();
+            List<Transaction> pendingTransactions = transactionPool.GetRange(0, n);
             transactionPool.RemoveRange(0, n);
+
+            return pendingTransactions;
+        }
+
+        public List<Transaction> getTrasnactionsOldest()
+        {
+            int n = Math.Min(MAX_TRANSACTIONS, transactionPool.Count);
+
+            List<Transaction> pendingTransactions = transactionPool.OrderBy(transaction => transaction.timestamp).Take(n).ToList();
+            transactionPool = transactionPool.OrderBy(transaction => transaction.timestamp).Skip(n).ToList();
+
+            return pendingTransactions;
+        }
+
+        public List<Transaction> getTrasnactionsRandom()
+        {
+            int n = Math.Min(MAX_TRANSACTIONS, transactionPool.Count);
+            List<Transaction> pendingTransactions = new List<Transaction>();
+
+            Random rnd = new Random();
+
+            for (int i = 0; i < n; i++)
+            {
+                int randomIndex = rnd.Next(transactionPool.Count - 1);
+
+                pendingTransactions.Add(transactionPool[randomIndex]);
+                transactionPool.RemoveAt(randomIndex);
+            }
+
+            return pendingTransactions;
+        }
+
+        public List<Transaction> getTrasnactionsGreedy()
+        {
+            int n = Math.Min(MAX_TRANSACTIONS, transactionPool.Count);
+
+            List<Transaction> pendingTransactions = transactionPool.OrderByDescending(transaction => transaction.fee).Take(n).ToList();
+            transactionPool = transactionPool.OrderByDescending(transaction => transaction.fee).Skip(n).ToList();
+
+            return pendingTransactions;
+        }
+
+        public List<Transaction> getTrasnactionsAddress(String address)
+        {
+            int n = Math.Min(MAX_TRANSACTIONS, transactionPool.Count);
+            List<Transaction> pendingTransactions = new List<Transaction>();
+
+            for (int i = 0; i < n; i++)
+            {
+                int addressIndex = transactionPool.FindIndex(transaction => transaction.senderAddress == address);
+                if(addressIndex != -1)
+                {
+                    pendingTransactions.Add(transactionPool[addressIndex]);
+                    transactionPool.RemoveAt(addressIndex);
+                }
+            }
 
             return pendingTransactions;
         }

@@ -81,11 +81,11 @@ namespace BlockchainAssignment
         {
             if(Wallet.Wallet.ValidatePrivateKey(privateKeyTextBox.Text, publicKeyTextBox.Text))
             {
-                TextOutput.Text = "Keys validation successful!";
+                print("Keys validation successful!");
             }
             else
             {
-                TextOutput.Text = "Keys validation unsuccsessful!";
+                print("Keys validation unsuccsessful!");
             }
         }
 
