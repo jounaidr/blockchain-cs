@@ -47,6 +47,10 @@
             this.recipientKeyTextBox = new System.Windows.Forms.TextBox();
             this.validateChainButton = new System.Windows.Forms.Button();
             this.checkBalanceButton = new System.Windows.Forms.Button();
+            this.generateBlockAltruisticButton = new System.Windows.Forms.Button();
+            this.generateBlockUnpredicatbleButton = new System.Windows.Forms.Button();
+            this.generateBlockGreedyButton = new System.Windows.Forms.Button();
+            this.generateBlockAddressBasedButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TextOutput
@@ -140,7 +144,7 @@
             this.generateBlockButton.Name = "generateBlockButton";
             this.generateBlockButton.Size = new System.Drawing.Size(95, 49);
             this.generateBlockButton.TabIndex = 10;
-            this.generateBlockButton.Text = "Generate Block";
+            this.generateBlockButton.Text = "Generate Block (default)";
             this.generateBlockButton.UseVisualStyleBackColor = true;
             this.generateBlockButton.Click += new System.EventHandler(this.generateBlockButton_Click);
             // 
@@ -227,12 +231,56 @@
             this.checkBalanceButton.UseVisualStyleBackColor = true;
             this.checkBalanceButton.Click += new System.EventHandler(this.checkBalanceButton_Click);
             // 
+            // generateBlockAltruisticButton
+            // 
+            this.generateBlockAltruisticButton.Location = new System.Drawing.Point(117, 649);
+            this.generateBlockAltruisticButton.Name = "generateBlockAltruisticButton";
+            this.generateBlockAltruisticButton.Size = new System.Drawing.Size(95, 49);
+            this.generateBlockAltruisticButton.TabIndex = 20;
+            this.generateBlockAltruisticButton.Text = "Generate Block (altruistic)";
+            this.generateBlockAltruisticButton.UseVisualStyleBackColor = true;
+            this.generateBlockAltruisticButton.Click += new System.EventHandler(this.generateBlockAltruisticButton_Click);
+            // 
+            // generateBlockUnpredicatbleButton
+            // 
+            this.generateBlockUnpredicatbleButton.Location = new System.Drawing.Point(218, 649);
+            this.generateBlockUnpredicatbleButton.Name = "generateBlockUnpredicatbleButton";
+            this.generateBlockUnpredicatbleButton.Size = new System.Drawing.Size(95, 49);
+            this.generateBlockUnpredicatbleButton.TabIndex = 21;
+            this.generateBlockUnpredicatbleButton.Text = "Generate Block (unpredicatble)";
+            this.generateBlockUnpredicatbleButton.UseVisualStyleBackColor = true;
+            this.generateBlockUnpredicatbleButton.Click += new System.EventHandler(this.generateBlockUnpredicatbleButton_Click);
+            // 
+            // generateBlockGreedyButton
+            // 
+            this.generateBlockGreedyButton.Location = new System.Drawing.Point(319, 649);
+            this.generateBlockGreedyButton.Name = "generateBlockGreedyButton";
+            this.generateBlockGreedyButton.Size = new System.Drawing.Size(95, 49);
+            this.generateBlockGreedyButton.TabIndex = 22;
+            this.generateBlockGreedyButton.Text = "Generate Block (greedy)";
+            this.generateBlockGreedyButton.UseVisualStyleBackColor = true;
+            this.generateBlockGreedyButton.Click += new System.EventHandler(this.generateBlockGreedyButton_Click);
+            // 
+            // generateBlockAddressBasedButton
+            // 
+            this.generateBlockAddressBasedButton.Location = new System.Drawing.Point(420, 649);
+            this.generateBlockAddressBasedButton.Name = "generateBlockAddressBasedButton";
+            this.generateBlockAddressBasedButton.Size = new System.Drawing.Size(95, 49);
+            this.generateBlockAddressBasedButton.TabIndex = 23;
+            this.generateBlockAddressBasedButton.Text = "Generate Block (personal)";
+            this.generateBlockAddressBasedButton.UseVisualStyleBackColor = true;
+            this.generateBlockAddressBasedButton.Click += new System.EventHandler(this.generateBlockAddressBasedButton_Click);
+            // 
             // BlockchainApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1441, 767);
+            this.Controls.Add(this.generateBlockAddressBasedButton);
+            this.Controls.Add(this.generateBlockGreedyButton);
+            this.Controls.Add(this.generateBlockUnpredicatbleButton);
+            this.Controls.Add(this.generateBlockAltruisticButton);
             this.Controls.Add(this.checkBalanceButton);
             this.Controls.Add(this.validateChainButton);
             this.Controls.Add(this.recipientKeyTextBox);
@@ -282,6 +330,10 @@
         private System.Windows.Forms.TextBox recipientKeyTextBox;
         private System.Windows.Forms.Button validateChainButton;
         private System.Windows.Forms.Button checkBalanceButton;
+        private System.Windows.Forms.Button generateBlockAltruisticButton;
+        private System.Windows.Forms.Button generateBlockUnpredicatbleButton;
+        private System.Windows.Forms.Button generateBlockGreedyButton;
+        private System.Windows.Forms.Button generateBlockAddressBasedButton;
     }
 }
 

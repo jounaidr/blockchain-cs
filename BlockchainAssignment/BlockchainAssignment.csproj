@@ -65,6 +65,7 @@
       <DependentUpon>BlockchainApp.cs</DependentUpon>
     </Compile>
     <Compile Include="HashCode\HashTools.cs" />
+    <Compile Include="HashCode\HexUtil.cs" />
     <Compile Include="HashCode\ShaUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

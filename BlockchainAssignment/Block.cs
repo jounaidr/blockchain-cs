@@ -13,15 +13,15 @@ namespace BlockchainAssignment
     class Block
     {
         const int THREADS = 24;
-        const double TARGET_BLOCK_TIME = 0.1;
+        const double TARGET_BLOCK_TIME = 5;
 
         public int index;
         public DateTime timestamp;
         public String hash;
         public String previousHash;
 
-        public double nonce = 0;
-        public double enonce = 0;
+        public int nonce = 0;
+        public int enonce = 0;
         public int difficulty;
 
         public double reward = 1.0;
@@ -34,12 +34,12 @@ namespace BlockchainAssignment
         public double blockTime;
         bool isHashFound;
 
-        public Block()
+        public Block() //No args constructor used to generate genesis block
         {
-            this.timestamp = DateTime.Now;
-            this.index = 0;
-            this.previousHash = String.Empty;
-            this.hash = this.generateHash();
+            this.timestamp = DateTime.Now; //Set block timestamp to current time
+            this.index = 0; //The index is set to 0 for genesis block
+            this.previousHash = ""; //Empty string for previous hash as there is no previous block
+            this.mineBlockThreaded(); //Mine the genesis hash
         }
 
         public Block(Block lastBlock, List<Transaction> transactions, String minerAddress = "")
@@ -71,6 +71,7 @@ namespace BlockchainAssignment
 
         public String generateHash()
         {
+            //Generate the hash based of the blocks parameters using the common SHA256 hashing method
             String hash = new ShaUtil().generateHash(
                                                     index.ToString() 
                                                     + timestamp.ToString() 
@@ -113,7 +114,7 @@ namespace BlockchainAssignment
                                                                 + reward.ToString()
                                                                 + merkleRoot);
 
-                        if (currentHash.StartsWith(hashDifficulty))
+                        if (HexUtil.HexStringToBinary(currentHash).StartsWith(hashDifficulty))
                         {
                             //If hash is found in the thread, set the global isHashFound flag to true (so other threads will stop mining)
                             isHashFound = true;
@@ -140,10 +141,11 @@ namespace BlockchainAssignment
 
             while (!hash.StartsWith(hashDifficulty))
             {
+                //Increment nonce value until hash is found that starts with a number of 0's for the defined difficulty
                 nonce++;
                 hash = generateHash();
             }
-
+            //Calculate blocktime as time diff between block timestamp and time when hash found
             TimeSpan timeDiff = DateTime.Now - this.timestamp;
             this.blockTime = timeDiff.TotalSeconds;
 
@@ -158,12 +160,12 @@ namespace BlockchainAssignment
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return "BLOCK: " + JsonConvert.SerializeObject(this);
         }
 
         public static String generateMerkleRoot(List<Transaction> transactions)
         {
-            List<String> hashes = transactions.Select(t => t.hash).ToList(); // Get a list of transaction hashes for "combining"
+            List<String> hashes = transactions.Select(t => t.hash).ToList();
 
             if (hashes.Count == 0) 
             {
